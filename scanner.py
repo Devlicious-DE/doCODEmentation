@@ -422,6 +422,7 @@ def build_inventory(
                     "healthcheck": {"present": health_present, "command": health_cmd},
                     "restart": service_raw.get("restart"),
                     "security": _security_flags(service_raw, service_type, service_override),
+                    "security_score": _security_flags(service_raw, service_type, service_override)["score"],
                     "labels": labels,
                     "source_file": str(compose_file),
                     "source": "compose",
