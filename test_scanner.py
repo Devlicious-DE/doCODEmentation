@@ -19,7 +19,8 @@ def test_variable_references_are_never_resolved() -> None:
 
 
 def test_basic_compose_scan_has_expected_keys(tmp_path: Path) -> None:
-    compose = tmp_path / "docker-compose.yml"
+    compose = tmp_path / "web" / "docker-compose.yml"
+    (tmp_path / "web").mkdir()
     compose.write_text(
         """
 services:
