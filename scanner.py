@@ -36,7 +36,7 @@ def _is_sensitive_path(path: Path) -> bool:
 def discover_compose_files(base_dir: Path) -> list[Path]:
     files: list[Path] = []
     for pattern in COMPOSE_FILE_PATTERNS:
-        files.extend(base_dir.rglob(pattern))
+        files.extend(base_dir.glob(f"*/{pattern}"))
     filtered: list[Path] = []
     for file_path in sorted(set(files)):
         # Security: never parse paths that look like env files or secret stores.
