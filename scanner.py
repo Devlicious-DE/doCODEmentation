@@ -364,7 +364,7 @@ def build_inventory(
             compose = _load_yaml(compose_file)
             raw_services = compose.get("services", {})
             if not isinstance(raw_services, dict):
-                warnings.append(f"{compose_file}: services block is invalid")
+                warnings.append(f"{compose_file.relative_to(base_dir)}: services block is invalid")
                 continue
 
             id_map = {
@@ -374,7 +374,7 @@ def build_inventory(
             }
             for service_name, service_raw in raw_services.items():
                 if not isinstance(service_raw, dict):
-                    warnings.append(f"{compose_file}: service {service_name} is invalid")
+                    warnings.append(f"{compose_file.relative_to(base_dir)}: service {service_name} is invalid")
                     continue
 
                 labels = _labels_to_dict(service_raw.get("labels", {}))
@@ -424,7 +424,7 @@ def build_inventory(
                     "security": _security_flags(service_raw, service_type, service_override),
                     "security_score": _security_flags(service_raw, service_type, service_override)["score"],
                     "labels": labels,
-                    "source_file": str(compose_file),
+                    "source_file": str(compose_file.relative_to(base_dir)),
                     "source": "compose",
                     "note": service_override.get("note"),
                     "potential_hardcoded_secrets": secret_findings,
@@ -497,8 +497,8 @@ def build_inventory(
         "metadata": {
             "scanner": "doCODEmentation",
             "version": scanner_version,
-            "base_dir": str(base_dir),
-            "compose_files": [str(p) for p in files],
+            "base_dir": base_dir.name,
+            "compose_files": [str(p.relative_to(base_dir)) for p in files],
             "service_count": len(services),
             "network_count": len(network_topology),
         },
